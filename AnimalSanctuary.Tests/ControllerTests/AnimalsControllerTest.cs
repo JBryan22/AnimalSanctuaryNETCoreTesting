@@ -11,13 +11,20 @@ using System;
 //new Veterinarian {VeterinarianId = 1, Name="Jesse", Specialty="African" },
 //new Veterinarian {VeterinarianId = 2, Name="Charlie", Specialty="Alligators" }
 
-namespace AnimalSanctuary.Tests.ControllerTests
+namespace AnimalSanctuary.Tests.ControllerTests 
 {
     [TestClass]
-    public class AnimalsControllerTest : IDisposable 
-    {
+    public class AnimalsControllerTest : IDisposable
+	{
         Mock<IAnimalRepository> mock = new Mock<IAnimalRepository>();
-        EFAnimalRepository db = new EFAnimalRepository(new TestDbContext());
+		EFAnimalRepository db = new EFAnimalRepository(new TestDbContext());
+		EFVeterinarianRepository db2 = new EFVeterinarianRepository(new TestDbContext());
+
+		public void Dispose()
+		{
+			db.RemoveAll();
+			db2.RemoveAll();
+		}
 
         private void DbSetup()
         {
@@ -74,8 +81,9 @@ namespace AnimalSanctuary.Tests.ControllerTests
         public void DB_CreateNewEntry_test()
         {
 			AnimalsController controller = new AnimalsController(db);
-			//VeterinariansController controller1 = new VeterinariansController(db);
-            //Veterinarian testVet = new Veterinarian("Jesse", "Elephants");
+			VeterinariansController controller1 = new VeterinariansController(db2);
+            Veterinarian testVet = new Veterinarian("Jesse", "Elephants");
+            testVet.VeterinarianId = 1;
             Animal testAnimal = new Animal();
 			testAnimal.AnimalId = 1;
 			testAnimal.Name = "Ellie";
@@ -85,7 +93,7 @@ namespace AnimalSanctuary.Tests.ControllerTests
 			testAnimal.MedicalEmergency = false;
 			testAnimal.VeterinarianId = 1;
 
-            //controller1.Create(testVet);
+            controller1.Create(testVet);
 
             controller.Create(testAnimal);
             var collection = (controller.Index() as ViewResult).ViewData.Model as List<Animal>;
@@ -95,9 +103,6 @@ namespace AnimalSanctuary.Tests.ControllerTests
             CollectionAssert.Contains(collection, testAnimal);
         }
 
-        public void Dispose()
-		{
-			db.RemoveAll();
-		}
+
     }
 }

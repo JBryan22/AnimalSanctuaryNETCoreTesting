@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace AnimalSanctuary.Models
 {
     public class Animal
@@ -73,5 +74,6 @@ namespace AnimalSanctuary.Models
             this.MedicalEmergency = medical;
             this.VeterinarianId = vetId;
         }
+
     }
 }

@@ -27,5 +27,24 @@ namespace AnimalSanctuary.Tests.ControllerTests
             }.AsQueryable());
         }
 
+        [TestMethod]
+        public void DB_CreateNewEntry_test()
+        {
+            VeterinariansController controller = new VeterinariansController(db);
+            Veterinarian testVeterinarian = new Veterinarian();
+            testVeterinarian.Name = "Jesse";
+            testVeterinarian.Specialty = "African";
+
+            controller.Create(testVeterinarian);
+            var collection = (controller.Index() as ViewResult).ViewData.Model as List<Veterinarian>;
+
+            CollectionAssert.Contains(collection, testVeterinarian);
+        }
+
+        public void Dispose()
+        {
+            db.RemoveAll();
+        }
+
     }
 }

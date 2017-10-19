@@ -50,7 +50,7 @@ namespace AnimalSanctuary.Models.Repositories
 
         public void RemoveAll()
         {
-            db.Animals.RemoveRange(Animals.ToList());
+            db.Animals.RemoveRange(db.Animals.ToList());
             db.SaveChanges();
         }
     }
