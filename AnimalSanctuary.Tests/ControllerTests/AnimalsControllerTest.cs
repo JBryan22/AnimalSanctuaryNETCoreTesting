@@ -98,11 +98,34 @@ namespace AnimalSanctuary.Tests.ControllerTests
             controller.Create(testAnimal);
             var collection = (controller.Index() as ViewResult).ViewData.Model as List<Animal>;
 
-
-
             CollectionAssert.Contains(collection, testAnimal);
         }
 
+        [TestMethod]
+        public void DB_Edit_test()
+        {
+			AnimalsController animalController = new AnimalsController(db);
+			VeterinariansController vetController = new VeterinariansController(db2);
+			Veterinarian testVet = new Veterinarian("Jesse", "Elephants");
+			testVet.VeterinarianId = 1;
+			Animal testAnimal = new Animal();
+			testAnimal.AnimalId = 1;
+			testAnimal.Name = "Ellie";
+			testAnimal.Species = "Elephant";
+			testAnimal.Sex = "Female";
+			testAnimal.HabitatType = "Savanna";
+			testAnimal.MedicalEmergency = false;
+			testAnimal.VeterinarianId = 1;
 
+            vetController.Create(testVet);
+            animalController.Create(testAnimal);
+
+            testAnimal.Name = "Eli";
+            animalController.Edit(testAnimal);
+
+            var collection = (animalController.Index() as ViewResult).ViewData.Model as List<Animal>;
+
+            Assert.AreEqual(testAnimal.Name, "Eli");
+        }
     }
 }
